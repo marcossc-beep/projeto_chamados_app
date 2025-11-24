@@ -1,61 +1,35 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Home from './pages/Home';
 
 export default function App() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [navigation, setNavigation] = useState('')
 
-  const findUsers = async () => {
-    const response = await fetch('http://localhost:3000/users')
-    const data = await response.json()
+  const viewPage = () => {
+    switch (navigation) {
+      case '':
+        return <Login navigate={setNavigation}></Login>
+        break;
+      
+      case 'register':
+        return <Register navigate={setNavigation}></Register>
+        break;
 
-    console.log(data);
-    
-  }
+      case 'home':
+        return <Home navigate={setNavigation}></Home>
+        break;
 
-  const login = async () => {
-    const response = await fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(
-        {email, password}
-      )
-    })
-    const data = await response.json()
-
-    console.log(data);
+      default:
+        break;
+    }
   }
 
   return (
     <View style={styles.container}>
-      <Text>Flamengoooo!</Text>
-
-      <TextInput
-        value={email}
-        placeholder='E-mail'
-        onChangeText={setEmail}
-      >
-      </TextInput>
-
-      <TextInput
-        value={password}
-        placeholder='Senha'
-        onChangeText={setPassword}
-      >
-      </TextInput>
-
-      <TouchableOpacity onPress={login}>
-        <Text>Entrar</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={findUsers}>
-        <Text>BUSCAR USUARIOS</Text>
-      </TouchableOpacity>
-
-     
+      {viewPage()}
     </View>
   );
 }
